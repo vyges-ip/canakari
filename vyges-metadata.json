@@ -1,0 +1,108 @@
+{
+  "$schema": "https://vyges.com/schema/v1/vyges-metadata.schema.json",
+  "name": "canakari",
+  "version": "1.0.0",
+  "description": "CAN 2.0B controller with full MAC and LLC layers. Supports standard and extended frames, acceptance filtering, fault confinement (error-active/passive/bus-off), bit stuffing/destuffing, CRC-15, and interrupt unit. Native Avalon bus interface with AXI4-Lite bridge included. Triplicated (TMR) variant available for safety-critical applications.",
+  "license": "MIT",
+  "maturity": "production",
+  "target": ["asic", "fpga"],
+  "design_type": ["digital"],
+  "created": "2000-01-01T00:00:00Z",
+  "updated": "2026-04-02T05:50:00Z",
+  "source": {
+    "type": "git",
+    "url": "https://github.com/FHDO-ICLAB/Canakari",
+    "private": false,
+    "rtl_path": "Verilog"
+  },
+  "interfaces": [
+    {
+      "type": "clock",
+      "signals": [{"name": "clock", "direction": "input", "width": 1}]
+    },
+    {
+      "type": "reset",
+      "signals": [{"name": "reset", "direction": "input", "width": 1}]
+    },
+    {
+      "type": "bus",
+      "protocol": "AXI4-Lite",
+      "description": "AXI4-Lite slave interface (via bridge module)",
+      "signals": [
+        {"name": "s_axi_aclk", "direction": "input", "width": 1},
+        {"name": "s_axi_aresetn", "direction": "input", "width": 1},
+        {"name": "s_axi_awaddr", "direction": "input", "width": 8},
+        {"name": "s_axi_awvalid", "direction": "input", "width": 1},
+        {"name": "s_axi_awready", "direction": "output", "width": 1},
+        {"name": "s_axi_wdata", "direction": "input", "width": 32},
+        {"name": "s_axi_wvalid", "direction": "input", "width": 1},
+        {"name": "s_axi_wready", "direction": "output", "width": 1},
+        {"name": "s_axi_araddr", "direction": "input", "width": 8},
+        {"name": "s_axi_arvalid", "direction": "input", "width": 1},
+        {"name": "s_axi_arready", "direction": "output", "width": 1},
+        {"name": "s_axi_rdata", "direction": "output", "width": 32},
+        {"name": "s_axi_rvalid", "direction": "output", "width": 1},
+        {"name": "s_axi_rready", "direction": "input", "width": 1}
+      ]
+    },
+    {
+      "type": "io",
+      "protocol": "CAN",
+      "description": "CAN bus transceiver interface (connect to CAN PHY)",
+      "signals": [
+        {"name": "can_tx", "direction": "output", "width": 1, "description": "CAN TX to transceiver"},
+        {"name": "can_rx", "direction": "input", "width": 1, "description": "CAN RX from transceiver"}
+      ]
+    },
+    {
+      "type": "interrupt",
+      "signals": [
+        {"name": "irq", "direction": "output", "width": 1, "description": "Interrupt request"}
+      ]
+    }
+  ],
+  "parameters": [
+    {"name": "PRESCALER_WIDTH", "type": "int", "default": "10", "description": "Bit timing prescaler width"},
+    {"name": "ACCEPTANCE_MASK_WIDTH", "type": "int", "default": "29", "description": "Acceptance filter mask width"}
+  ],
+  "rtl_files": [
+    "Verilog/can2.v", "Verilog/bittime2.v", "Verilog/bittiming2.v",
+    "Verilog/encapsulation2.v", "Verilog/decapsulation2.v",
+    "Verilog/stuffing2.v", "Verilog/destuffing2.v",
+    "Verilog/faultfsm2.v", "Verilog/fce2.v",
+    "Verilog/biterrordetect2.v", "Verilog/erbcount2.v",
+    "Verilog/accmaskreg2.v", "Verilog/equal_id2.v",
+    "Verilog/interruptunit2.v", "Verilog/interruptregister2.v",
+    "Verilog/generalregister2.v", "Verilog/fsm_register2.v",
+    "Verilog/iocpuavalon2.v", "Verilog/counter2.v",
+    "Verilog/edgepuffer2.v", "Verilog/fastshift2.v",
+    "Verilog/llc2.v", "Verilog/mac2.v",
+    "Verilog/prescaler2.v", "Verilog/rshiftrega2.v",
+    "Verilog/rshiftregb2.v", "Verilog/timeoutcounter2.v"
+  ],
+  "rtl_quality": {
+    "module_prefixed": false,
+    "defines_prefixed": false,
+    "header_guards": false,
+    "one_module_per_file": true,
+    "self_contained_includes": true,
+    "no_translate_pragmas": true,
+    "lint_clean": false,
+    "no_casex": true,
+    "width_clean": false,
+    "no_sv_keyword_conflicts": true
+  },
+  "defines": [],
+  "categories": [
+    {"main_category": "Interface Controllers", "sub_category": "CAN Bus"}
+  ],
+  "trust": {
+    "verification_level": "simulation_passing",
+    "tapeout_count": 0,
+    "fpga_validated": true,
+    "maintained": true
+  },
+  "branding": {
+    "display_name": "CAN Controller"
+  }
+}

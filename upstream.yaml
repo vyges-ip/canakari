@@ -1,0 +1,13 @@
+upstream:
+  source: https://github.com/FHDO-ICLAB/Canakari
+  branch: master
+  license: MIT
+  rtl_paths:
+    - Verilog
+    - AXI4_Lite
+  exclude:
+    - VHDL
+    - TMR
+    - testbench
+    - doc
+    - Modelsim
