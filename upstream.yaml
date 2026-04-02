@@ -1,13 +1,19 @@
+schema_version: "vyges-upstream-v1"
 upstream:
+  type: "standalone"
   source: https://github.com/FHDO-ICLAB/Canakari
   branch: master
-  license: MIT
-  rtl_paths:
-    - Verilog
-    - AXI4_Lite
-  exclude:
-    - VHDL
-    - TMR
-    - testbench
-    - doc
-    - Modelsim
+import:
+  rtl:
+    - path: "Verilog"
+      map_to: "rtl"
+    - path: "AXI4_Lite"
+      map_to: "rtl/axi4_lite"
+  license:
+    - path: "LICENSE"
+  readme:
+    - path: "README.md"
+license:
+  spdx: MIT
+  file: LICENSE
+metadata_locked: true
