@@ -1,108 +1,187 @@
 {
   "$schema": "https://vyges.com/schema/v1/vyges-metadata.schema.json",
+  "x-version": "1.0.0",
   "name": "canakari",
-  "version": "1.0.0",
-  "description": "CAN 2.0B controller with full MAC and LLC layers. Supports standard and extended frames, acceptance filtering, fault confinement (error-active/passive/bus-off), bit stuffing/destuffing, CRC-15, and interrupt unit. Native Avalon bus interface with AXI4-Lite bridge included. Triplicated (TMR) variant available for safety-critical applications.",
+  "version": "0.1.0",
+  "description": "CANakari is a CAN 2.0B Controller implemented in Verilog and VHDL, designed for automotive and industrial communication systems. It supports message encapsulation, error detection, and fault handling with a modular architecture.",
   "license": "MIT",
-  "maturity": "production",
-  "target": ["asic", "fpga"],
-  "design_type": ["digital"],
-  "created": "2000-01-01T00:00:00Z",
-  "updated": "2026-04-02T05:50:00Z",
+  "maturity": "rtl_verified",
+  "target": [
+    "asic",
+    "fpga"
+  ],
+  "design_type": [
+    "digital"
+  ],
+  "created": "2026-04-06T04:31:26Z",
+  "updated": "2026-04-06T04:31:26Z",
   "source": {
     "type": "git",
     "url": "https://github.com/FHDO-ICLAB/Canakari",
+    "commit": "null",
+    "ip_path": ".",
     "private": false,
-    "rtl_path": "Verilog"
+    "containsEncryptedPayload": false,
+    "indexing": true
   },
+  "maintainers": [
+    {
+      "name": "Vyges",
+      "email": "team@vyges.com",
+      "url": "https://vyges.com",
+      "github": "vyges"
+    }
+  ],
   "interfaces": [
     {
-      "type": "clock",
-      "signals": [{"name": "clock", "direction": "input", "width": 1}]
-    },
-    {
-      "type": "reset",
-      "signals": [{"name": "reset", "direction": "input", "width": 1}]
+      "type": "bus",
+      "direction": "master",
+      "protocol": "CAN 2.0B",
+      "port": "CAN_TX",
+      "width": 1,
+      "description": "CAN bus transmit line"
     },
     {
       "type": "bus",
-      "protocol": "AXI4-Lite",
-      "description": "AXI4-Lite slave interface (via bridge module)",
-      "signals": [
-        {"name": "s_axi_aclk", "direction": "input", "width": 1},
-        {"name": "s_axi_aresetn", "direction": "input", "width": 1},
-        {"name": "s_axi_awaddr", "direction": "input", "width": 8},
-        {"name": "s_axi_awvalid", "direction": "input", "width": 1},
-        {"name": "s_axi_awready", "direction": "output", "width": 1},
-        {"name": "s_axi_wdata", "direction": "input", "width": 32},
-        {"name": "s_axi_wvalid", "direction": "input", "width": 1},
-        {"name": "s_axi_wready", "direction": "output", "width": 1},
-        {"name": "s_axi_araddr", "direction": "input", "width": 8},
-        {"name": "s_axi_arvalid", "direction": "input", "width": 1},
-        {"name": "s_axi_arready", "direction": "output", "width": 1},
-        {"name": "s_axi_rdata", "direction": "output", "width": 32},
-        {"name": "s_axi_rvalid", "direction": "output", "width": 1},
-        {"name": "s_axi_rready", "direction": "input", "width": 1}
-      ]
+      "direction": "slave",
+      "protocol": "CAN 2.0B",
+      "port": "CAN_RX",
+      "width": 1,
+      "description": "CAN bus receive line"
     },
     {
-      "type": "io",
-      "protocol": "CAN",
-      "description": "CAN bus transceiver interface (connect to CAN PHY)",
-      "signals": [
-        {"name": "can_tx", "direction": "output", "width": 1, "description": "CAN TX to transceiver"},
-        {"name": "can_rx", "direction": "input", "width": 1, "description": "CAN RX from transceiver"}
-      ]
+      "type": "clock",
+      "direction": "input",
+      "protocol": "clock",
+      "port": "CLK",
+      "width": 1,
+      "description": "System clock input"
+    },
+    {
+      "type": "reset",
+      "direction": "input",
+      "protocol": "reset",
+      "port": "RESET",
+      "width": 1,
+      "description": "System reset input"
     },
     {
       "type": "interrupt",
-      "signals": [
-        {"name": "irq", "direction": "output", "width": 1, "description": "Interrupt request"}
-      ]
+      "direction": "output",
+      "protocol": "interrupt",
+      "port": "INT",
+      "width": 1,
+      "description": "Interrupt request output"
     }
   ],
   "parameters": [
-    {"name": "PRESCALER_WIDTH", "type": "int", "default": "10", "description": "Bit timing prescaler width"},
-    {"name": "ACCEPTANCE_MASK_WIDTH", "type": "int", "default": "29", "description": "Acceptance filter mask width"}
+    {
+      "name": "DATA_WIDTH",
+      "type": "int",
+      "default": 8,
+      "description": "Width of the data bus"
+    },
+    {
+      "name": "ADDR_WIDTH",
+      "type": "int",
+      "default": 16,
+      "description": "Width of the address bus"
+    },
+    {
+      "name": "CLOCK_FREQ",
+      "type": "int",
+      "default": 50000000,
+      "description": "Clock frequency in Hz"
+    },
+    {
+      "name": "BAUD_RATE",
+      "type": "int",
+      "default": 500000,
+      "description": "CAN bus baud rate in bits per second"
+    }
   ],
-  "rtl_files": [
-    "Verilog/can2.v", "Verilog/bittime2.v", "Verilog/bittiming2.v",
-    "Verilog/encapsulation2.v", "Verilog/decapsulation2.v",
-    "Verilog/stuffing2.v", "Verilog/destuffing2.v",
-    "Verilog/faultfsm2.v", "Verilog/fce2.v",
-    "Verilog/biterrordetect2.v", "Verilog/erbcount2.v",
-    "Verilog/accmaskreg2.v", "Verilog/equal_id2.v",
-    "Verilog/interruptunit2.v", "Verilog/interruptregister2.v",
-    "Verilog/generalregister2.v", "Verilog/fsm_register2.v",
-    "Verilog/iocpuavalon2.v", "Verilog/counter2.v",
-    "Verilog/edgepuffer2.v", "Verilog/fastshift2.v",
-    "Verilog/llc2.v", "Verilog/mac2.v",
-    "Verilog/prescaler2.v", "Verilog/rshiftrega2.v",
-    "Verilog/rshiftregb2.v", "Verilog/timeoutcounter2.v"
-  ],
-  "rtl_quality": {
-    "module_prefixed": false,
-    "defines_prefixed": false,
-    "header_guards": false,
-    "one_module_per_file": true,
-    "self_contained_includes": true,
-    "no_translate_pragmas": true,
-    "lint_clean": false,
-    "no_casex": true,
-    "width_clean": false,
-    "no_sv_keyword_conflicts": true
+  "performance": {
+    "max_clock_frequency": "50 MHz",
+    "throughput": "500 kbps",
+    "latency": "1 clock cycle"
   },
-  "defines": [],
+  "architecture": {
+    "type": "peripheral",
+    "features": [
+      "CAN 2.0B protocol support",
+      "Message encapsulation and decapsulation",
+      "Error detection and correction",
+      "Fault state handling",
+      "Interrupt generation"
+    ]
+  },
+  "asic": {
+    "flavor": "digital",
+    "technology": [
+      "sky130A"
+    ]
+  },
+  "fpga": {
+    "toolchain": [
+      "Vivado"
+    ],
+    "devices": [
+      "Artix-7"
+    ]
+  },
+  "dependencies": [
+    {
+      "name": "Avalon-MM",
+      "type": "bus",
+      "description": "Avalon Memory-Mapped interface for CPU communication"
+    }
+  ],
+  "test": {
+    "testbenches": [
+      "testbench_can2",
+      "testbench_bittiming2",
+      "testbench_interruptunit2"
+    ],
+    "status": "upstream_passing",
+    "coverage": "functional"
+  },
+  "documentation": {
+    "upstream": "https://github.com/FHDO-ICLAB/Canakari/blob/main/Documentation_Canakari.pdf"
+  },
+  "artifacts": {
+    "total_rtl_lines": 8973
+  },
   "categories": [
-    {"main_category": "Interface Controllers", "sub_category": "CAN Bus"}
+    {
+      "main_category": "Interface Controllers",
+      "sub_category": "Serial Interfaces"
+    }
+  ],
+  "keywords": [
+    "CAN",
+    "Controller",
+    "Automotive",
+    "Industrial",
+    "Communication",
+    "Verilog",
+    "VHDL"
   ],
   "trust": {
     "verification_level": "simulation_passing",
     "tapeout_count": 0,
-    "fpga_validated": true,
-    "maintained": true
+    "fpga_validated": false,
+    "formal_verified": false,
+    "maintained": true,
+    "last_activity": "2026-04-06T04:31:26Z"
   },
-  "branding": {
-    "display_name": "CAN Controller"
+  "meta": {
+    "template": {
+      "generator": "github-models-ai",
+      "template_version": "1.0.0",
+      "generated_at": "2026-04-06T04:31:26Z"
+    },
+    "schema": {
+      "version": "1.0.0"
+    }
   }
 }
