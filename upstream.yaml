@@ -3,6 +3,7 @@ upstream:
   type: "standalone"
   source: https://github.com/FHDO-ICLAB/Canakari
   branch: master
+  commit: a0305eb4ac7ef7cd2a02e67d8225c8bf49a8b5db
 import:
   rtl:
     - path: "Verilog"

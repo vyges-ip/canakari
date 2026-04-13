@@ -3,7 +3,7 @@
   "x-version": "1.0.0",
   "name": "canakari",
   "version": "0.1.0",
-  "description": "CANakari is a CAN 2.0B Controller implemented in Verilog and VHDL, designed for automotive and industrial communication systems. It supports message encapsulation, error detection, and fault handling with a modular architecture.",
+  "description": "CANakari is a CAN 2.0B Controller implemented in Verilog and VHDL, designed for automotive and industrial communication systems. It supports message encapsulation, error detection, and fault handling mechanisms.",
   "license": "MIT",
   "maturity": "rtl_verified",
   "target": [
@@ -13,8 +13,8 @@
   "design_type": [
     "digital"
   ],
-  "created": "2026-04-06T04:31:26Z",
-  "updated": "2026-04-06T04:31:26Z",
+  "created": "2026-04-13T02:36:37Z",
+  "updated": "2026-04-13T02:36:37Z",
   "source": {
     "type": "git",
     "url": "https://github.com/FHDO-ICLAB/Canakari",
@@ -35,84 +35,59 @@
   "interfaces": [
     {
       "type": "bus",
-      "direction": "master",
+      "direction": "both",
       "protocol": "CAN 2.0B",
-      "port": "CAN_TX",
+      "port": "can_bus",
       "width": 1,
-      "description": "CAN bus transmit line"
-    },
-    {
-      "type": "bus",
-      "direction": "slave",
-      "protocol": "CAN 2.0B",
-      "port": "CAN_RX",
-      "width": 1,
-      "description": "CAN bus receive line"
+      "description": "CAN bus interface for communication."
     },
     {
       "type": "clock",
       "direction": "input",
-      "protocol": "clock",
-      "port": "CLK",
+      "protocol": "N/A",
+      "port": "clk",
       "width": 1,
-      "description": "System clock input"
+      "description": "System clock input."
     },
     {
       "type": "reset",
       "direction": "input",
-      "protocol": "reset",
-      "port": "RESET",
+      "protocol": "N/A",
+      "port": "reset_n",
       "width": 1,
-      "description": "System reset input"
+      "description": "Active-low reset signal."
     },
     {
       "type": "interrupt",
       "direction": "output",
-      "protocol": "interrupt",
-      "port": "INT",
+      "protocol": "N/A",
+      "port": "irq",
       "width": 1,
-      "description": "Interrupt request output"
+      "description": "Interrupt request output."
     }
   ],
   "parameters": [
     {
-      "name": "DATA_WIDTH",
-      "type": "int",
-      "default": 8,
-      "description": "Width of the data bus"
-    },
-    {
-      "name": "ADDR_WIDTH",
-      "type": "int",
-      "default": 16,
-      "description": "Width of the address bus"
-    },
-    {
-      "name": "CLOCK_FREQ",
-      "type": "int",
-      "default": 50000000,
-      "description": "Clock frequency in Hz"
-    },
-    {
-      "name": "BAUD_RATE",
+      "name": "CAN_BITRATE",
       "type": "int",
       "default": 500000,
-      "description": "CAN bus baud rate in bits per second"
+      "description": "Default CAN bus bitrate in bits per second."
+    },
+    {
+      "name": "FIFO_DEPTH",
+      "type": "int",
+      "default": 16,
+      "description": "Depth of the internal FIFO buffer."
     }
   ],
-  "performance": {
-    "max_clock_frequency": "50 MHz",
-    "throughput": "500 kbps",
-    "latency": "1 clock cycle"
-  },
+  "performance": {},
   "architecture": {
     "type": "peripheral",
     "features": [
       "CAN 2.0B protocol support",
       "Message encapsulation and decapsulation",
-      "Error detection and correction",
-      "Fault state handling",
-      "Interrupt generation"
+      "Error detection and fault handling",
+      "Bit timing and synchronization"
     ]
   },
   "asic": {
@@ -131,22 +106,18 @@
   },
   "dependencies": [
     {
-      "name": "Avalon-MM",
-      "type": "bus",
-      "description": "Avalon Memory-Mapped interface for CPU communication"
+      "name": "CAN Protocol Library",
+      "type": "library",
+      "description": "Provides CAN protocol-specific functionality."
     }
   ],
   "test": {
-    "testbenches": [
-      "testbench_can2",
-      "testbench_bittiming2",
-      "testbench_interruptunit2"
-    ],
+    "testbenches": [],
     "status": "upstream_passing",
     "coverage": "functional"
   },
   "documentation": {
-    "upstream": "https://github.com/FHDO-ICLAB/Canakari/blob/main/Documentation_Canakari.pdf"
+    "upstream": "https://github.com/FHDO-ICLAB/Canakari"
   },
   "artifacts": {
     "total_rtl_lines": 8973
@@ -162,9 +133,7 @@
     "Controller",
     "Automotive",
     "Industrial",
-    "Communication",
-    "Verilog",
-    "VHDL"
+    "Communication"
   ],
   "trust": {
     "verification_level": "simulation_passing",
@@ -172,13 +141,13 @@
     "fpga_validated": false,
     "formal_verified": false,
     "maintained": true,
-    "last_activity": "2026-04-06T04:31:26Z"
+    "last_activity": "2026-04-13"
   },
   "meta": {
     "template": {
       "generator": "github-models-ai",
       "template_version": "1.0.0",
-      "generated_at": "2026-04-06T04:31:26Z"
+      "generated_at": "2026-04-13T02:36:37Z"
     },
     "schema": {
       "version": "1.0.0"
