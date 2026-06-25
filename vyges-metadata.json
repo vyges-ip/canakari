@@ -56,7 +56,10 @@
           "pready": "PREADY"
         }
       },
-      "note": "vyges_canakari_apb (vyges-additions/) bridges clk_i/rst_ni + APB4 to can2's native Avalon-MM port + active-low reset; exposes CAN rx/tx + IRQ. Generic generator wiring, no Avalon-specific handling."
+      "note": "vyges_canakari_apb (vyges-additions/) bridges clk_i/rst_ni + APB4 to can2's native Avalon-MM port + active-low reset; exposes CAN rx/tx + IRQ. Generic generator wiring, no Avalon-specific handling.",
+      "lint_waivers": [
+        "vyges-additions/vyges-lint-waivers.vlt"
+      ]
     }
   },
   "interfaces": [
