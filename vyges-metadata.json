@@ -14,7 +14,7 @@
     "digital"
   ],
   "created": "2026-04-13T02:36:37Z",
-  "updated": "2026-04-13T02:36:37Z",
+  "updated": "2026-06-25T05:08:04Z",
   "source": {
     "type": "git",
     "url": "https://github.com/FHDO-ICLAB/Canakari",
@@ -32,6 +32,12 @@
       "github": "vyges"
     }
   ],
+  "integration": {
+    "soc_generator_hints": {
+      "top_module": "can2",
+      "note": "Integration top is can2. Without this hint the soc-generator derives the module name from the IP name ('canakari'), which does not match the RTL top module."
+    }
+  },
   "interfaces": [
     {
       "type": "bus",
