@@ -5,4 +5,5 @@
 // submodules) is not declared, so Verilator creates it implicitly (1-bit).
 // Functionally correct; lint-style omission upstream. Reported upstream as a
 // question. Waive IMPLICIT for this file only.
+// Upstream issue: https://github.com/FHDO-ICLAB/Canakari/issues/1
 lint_off -rule IMPLICIT -file "*llc2.v"
