@@ -14,7 +14,7 @@
     "digital"
   ],
   "created": "2026-04-13T02:36:37Z",
-  "updated": "2026-06-25T05:08:04Z",
+  "updated": "2026-06-25T06:01:25Z",
   "source": {
     "type": "git",
     "url": "https://github.com/FHDO-ICLAB/Canakari",
@@ -34,42 +34,148 @@
   ],
   "integration": {
     "soc_generator_hints": {
-      "top_module": "can2",
-      "note": "Integration top is can2. Without this hint the soc-generator derives the module name from the IP name ('canakari'), which does not match the RTL top module."
+      "top_module": "vyges_canakari_apb",
+      "rtl_files": [
+        "vyges-additions/vyges_canakari_apb.sv"
+      ],
+      "clock": {
+        "port": "clk_i"
+      },
+      "reset": {
+        "port": "rst_ni"
+      },
+      "bus_slave": {
+        "addr_width": 32,
+        "ports": {
+          "psel": "PSEL",
+          "penable": "PENABLE",
+          "pwrite": "PWRITE",
+          "paddr": "PADDR",
+          "pwdata": "PWDATA",
+          "prdata": "PRDATA",
+          "pready": "PREADY"
+        }
+      },
+      "note": "vyges_canakari_apb (vyges-additions/) bridges clk_i/rst_ni + APB4 to can2's native Avalon-MM port + active-low reset; exposes CAN rx/tx + IRQ. Generic generator wiring, no Avalon-specific handling."
     }
   },
   "interfaces": [
     {
-      "type": "bus",
-      "direction": "both",
-      "protocol": "CAN 2.0B",
-      "port": "can_bus",
-      "width": 1,
-      "description": "CAN bus interface for communication."
-    },
-    {
+      "name": "clock",
       "type": "clock",
       "direction": "input",
-      "protocol": "N/A",
-      "port": "clk",
-      "width": 1,
-      "description": "System clock input."
+      "signals": [
+        {
+          "name": "clk_i",
+          "direction": "input",
+          "type": "clock",
+          "width": 1
+        }
+      ]
     },
     {
+      "name": "reset",
       "type": "reset",
       "direction": "input",
-      "protocol": "N/A",
-      "port": "reset_n",
-      "width": 1,
-      "description": "Active-low reset signal."
+      "signals": [
+        {
+          "name": "rst_ni",
+          "direction": "input",
+          "type": "reset",
+          "width": 1,
+          "active_level": "low"
+        }
+      ]
     },
     {
+      "name": "apb",
+      "type": "bus",
+      "protocol": "apb",
+      "direction": "slave",
+      "description": "APB4 slave (via the vyges facade).",
+      "signals": [
+        {
+          "name": "PADDR",
+          "direction": "input",
+          "type": "address",
+          "width": 32
+        },
+        {
+          "name": "PWRITE",
+          "direction": "input",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PWDATA",
+          "direction": "input",
+          "type": "data",
+          "width": 32
+        },
+        {
+          "name": "PSEL",
+          "direction": "input",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PENABLE",
+          "direction": "input",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PREADY",
+          "direction": "output",
+          "type": "control",
+          "width": 1
+        },
+        {
+          "name": "PRDATA",
+          "direction": "output",
+          "type": "data",
+          "width": 32
+        }
+      ]
+    },
+    {
+      "name": "can_rx",
+      "type": "io",
+      "direction": "input",
+      "signals": [
+        {
+          "name": "rx",
+          "direction": "input",
+          "type": "data",
+          "width": 1
+        }
+      ]
+    },
+    {
+      "name": "can_tx",
+      "type": "io",
+      "direction": "output",
+      "signals": [
+        {
+          "name": "tx",
+          "direction": "output",
+          "type": "data",
+          "width": 1
+        }
+      ]
+    },
+    {
+      "name": "irq",
       "type": "interrupt",
       "direction": "output",
-      "protocol": "N/A",
-      "port": "irq",
-      "width": 1,
-      "description": "Interrupt request output."
+      "signals": [
+        {
+          "name": "IRQ",
+          "direction": "output",
+          "type": "interrupt",
+          "width": 1
+        }
+      ]
     }
   ],
   "parameters": [
